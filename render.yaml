@@ -1,0 +1,23 @@
+# render.yaml — AutexAI
+# ─────────────────────────────────────────────────────────────────────────────
+# Uses Supabase as external PostgreSQL — do NOT add a `databases:` section.
+# Set DATABASE_URL manually in Render dashboard → Environment.
+# Format: postgresql://postgres:[PASSWORD]@db.[REF].supabase.co:5432/postgres
+# ─────────────────────────────────────────────────────────────────────────────
+services:
+  - type: web
+    name: autexai
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --timeout 120 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false
